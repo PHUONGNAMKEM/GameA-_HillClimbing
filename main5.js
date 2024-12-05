@@ -25,7 +25,7 @@ const exit = { x: 19, y: 9 };
 
 // Tạo 5 ô chướng ngại vật ngẫu nhiên
 const obstacles = [];
-while (obstacles.length < 70) {
+while (obstacles.length < 50) {
   const x = Math.floor(Math.random() * sizeX);
   const y = Math.floor(Math.random() * sizeY);
   if ((x !== player.x || y !== player.y) && (x !== exit.x || y !== exit.y) && !obstacles.some(o => o.x === x && o.y === y)) {
