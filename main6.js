@@ -1,6 +1,6 @@
 // Kích thước ma trận
-const sizeX = 20;
-const sizeY = 23;
+const sizeX = 50;
+const sizeY = 30;
 
 // Khởi tạo vị trí player, exit và enemies
 const player = { x: 0, y: 0 };
@@ -11,19 +11,23 @@ const enemies = [
   // { x: 7, y: 3, direction: 'left' },
   { x: 1, y: 8, direction: 'up' },
 ];
+
+
 // Đảm bảo player và exit nằm ngoài tường
 function ensureValidPosition(position, maze) {
-  while (
-    position.y < 0 || 
-    position.y >= maze.length || 
-    position.x < 0 || 
-    position.x >= maze[0].length || 
-    maze[position.y][position.x] === 1
-  ) {
-    position.x = Math.floor(Math.random() * (sizeX - 2)) + 1;
-    position.y = Math.floor(Math.random() * (sizeY - 2)) + 1;
+    while (
+      position.y < 0 || 
+      position.y >= maze.length || 
+      position.x < 0 || 
+      position.x >= maze[0].length || 
+      maze[position.y][position.x] !== 0 // Đảm bảo là đường đi
+    ) {
+      position.x = Math.floor(Math.random() * (sizeX - 2)) + 1;
+      position.y = Math.floor(Math.random() * (sizeY - 2)) + 1;
+    }
   }
-}
+  
+
 // Tạo mê cung bằng thuật toán DFS
 function generateMaze(sizeX, sizeY) {
   const maze = Array.from({ length: sizeY }, () => Array(sizeX).fill(1)); // 1 là tường, 0 là đường đi
@@ -103,31 +107,75 @@ function renderMaze() {
     }
   }
 }
-// Gọi hàm để hiển thị ma trận ban đầu
-renderMaze();
-ensureValidPosition(player, maze);       // Đảm bảo player nằm ngoài tường
-ensureValidPosition(exit, maze);         // Đảm bảo exit nằm ngoài tường
-ensurePath(maze, player, exit);          // Đảm bảo có đường nối giữa player và exit
 
-// Đảm bảo có đường nối giữa player và exit
+
+
+// Đảm bảo có đường đi giữa hai vị trí bằng cách phá tường
 function ensurePath(maze, start, end) {
-  const path = aStar(start, end, obstacles);
-  if (path.length === 0) {
-    // Duyệt từ start đến end và mở tường nếu cần thiết
-    let current = { ...start };
-    while (current.x !== end.x || current.y !== end.y) {
-      maze[current.y][current.x] = 0;
-      if (current.x < end.x) current.x++;
-      else if (current.x > end.x) current.x--;
-      else if (current.y < end.y) current.y++;
-      else if (current.y > end.y) current.y--;
+    const path = aStar(start, end, obstacles);
+    if (path.length === 0) {
+      // Phá tường để tạo lối đi
+      let current = { ...start };
+      while (current.x !== end.x || current.y !== end.y) {
+        maze[current.y][current.x] = 0; // Mở ô hiện tại
+  
+        // Di chuyển theo hướng ngắn nhất đến đích
+        if (current.x < end.x) current.x++;
+        else if (current.x > end.x) current.x--;
+        else if (current.y < end.y) current.y++;
+        else if (current.y > end.y) current.y--;
+      }
+      maze[end.y][end.x] = 0; // Đảm bảo điểm đích cũng là đường đi
     }
-    maze[end.y][end.x] = 0; // Đảm bảo điểm đích cũng là đường đi
   }
-}
-
-// Sau khi tạo mê cung, gọi hàm đảm bảo đường đi
-ensurePath(maze, player, exit);
+  
+  // Khởi tạo vị trí đảm bảo nằm trên đường đi
+  function ensureValidPosition(position, maze) {
+    do {
+      position.x = Math.floor(Math.random() * (sizeX - 2)) + 1;
+      position.y = Math.floor(Math.random() * (sizeY - 2)) + 1;
+    } while (maze[position.y][position.x] !== 0); // Đảm bảo là đường đi
+  }
+  
+  // Đảm bảo không có thực thể nào bị bao quanh bởi tường
+  function ensureEntitiesUnblocked(maze, entities) {
+    for (const entity of entities) {
+      let validNeighbors = [
+        { x: entity.x + 1, y: entity.y },
+        { x: entity.x - 1, y: entity.y },
+        { x: entity.x, y: entity.y + 1 },
+        { x: entity.x, y: entity.y - 1 },
+      ].filter((n) =>
+        n.x >= 0 &&
+        n.x < sizeX &&
+        n.y >= 0 &&
+        n.y < sizeY &&
+        maze[n.y][n.x] === 0
+      );
+  
+      if (validNeighbors.length === 0) {
+        // Phá tường xung quanh nếu bị bao quanh
+        validNeighbors = [
+          { x: entity.x + 1, y: entity.y },
+          { x: entity.x - 1, y: entity.y },
+          { x: entity.x, y: entity.y + 1 },
+          { x: entity.x, y: entity.y - 1 },
+        ];
+        for (const n of validNeighbors) {
+          if (n.x >= 0 && n.x < sizeX && n.y >= 0 && n.y < sizeY) {
+            maze[n.y][n.x] = 0; // Mở tường
+          }
+        }
+      }
+    }
+  }
+  
+  // Gọi hàm đảm bảo sau khi khởi tạo
+  ensureValidPosition(player, maze);       // Đảm bảo player nằm ngoài tường
+  ensureValidPosition(exit, maze);         // Đảm bảo exit nằm ngoài tường
+  ensurePath(maze, player, exit);          // Đảm bảo có đường nối giữa player và exit
+  ensureEntitiesUnblocked(maze, [player, exit, ...enemies]); // Đảm bảo các thực thể không bị bao quanh
+  renderMaze();
 
 
 // Hàm tính khoảng cách Manhattan

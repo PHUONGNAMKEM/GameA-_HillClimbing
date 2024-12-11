@@ -20,9 +20,12 @@ h1 {
 #game-container {
   display: grid;
   grid-template-columns: repeat(20, 60px);
-  grid-template-rows: repeat(10, 60px);
+  grid-template-rows: repeat(20, 60px);
   gap: 2px;
 }
+
+
+
 
 .cell {
   position: relative; /* Đảm bảo có thể sử dụng z-index */
