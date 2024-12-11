@@ -230,7 +230,7 @@ function moveEnemies() {
 // Di chuyển enemies định kỳ
 const btnStart = document.getElementById('btn_start');
 document.addEventListener('click', () => {
-    setInterval(moveEnemies, 100);
+    setInterval(moveEnemies, 300);
 });
 
 // setInterval(moveEnemies, 300);

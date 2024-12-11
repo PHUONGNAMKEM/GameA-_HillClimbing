@@ -6,11 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple 2D Maze Game</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      transform: scale(0.5);
+      transform-origin: top left;
+      /* Đặt gốc biến đổi ở góc trên bên trái */
+      width: 200%;
+      /* Đảm bảo chiều rộng đủ lớn để không bị cắt */
+      height: 200%;
+      /* Đảm bảo chiều cao đủ lớn để không bị cắt */
+      overflow: hidden;
+      /* Ẩn phần tràn */
+    }
+  </style>
 </head>
 
 <body>
   <div class="second-page">
-    <div id="game-container"></div>
+    <div id="game-container" style="margin-top: 830px;"></div>
     <button id="btn_start">Start</button>
   </div>
 
