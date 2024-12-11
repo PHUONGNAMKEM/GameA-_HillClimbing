@@ -1,15 +1,15 @@
 // Kích thước ma trận
-const sizeX = 50;
-const sizeY = 30;
+const sizeX = 60;
+const sizeY = 28;
 
 // Khởi tạo vị trí player, exit và enemies
 const player = { x: 0, y: 0 };
 const exit = { x: 19, y: 9 };
 const enemies = [
-  { x: 2, y: 2, direction: 'right' },
-  // { x: 5, y: 5, direction: 'down' },
-  // { x: 7, y: 3, direction: 'left' },
-  { x: 1, y: 8, direction: 'up' },
+  { x: 10, y: 25, direction: 'right' },
+  { x: 10, y: 5, direction: 'down' },
+  { x: 50, y: 25, direction: 'left' },
+  { x: 50, y: 5, direction: 'up' },
 ];
 
 
@@ -55,9 +55,7 @@ function generateMaze(sizeX, sizeY) {
       }
     }
   }
-
   dfs(1, 1); // Bắt đầu tạo mê cung từ vị trí (1, 1)
-
   // Phá thêm tường ngẫu nhiên để tạo nhiều đường đi hơn
   for (let i = 0; i < sizeX * sizeY * 0.1; i++) { // Tỷ lệ phá tường thêm (10% số ô)
     const x = Math.floor(Math.random() * sizeX);
@@ -66,7 +64,6 @@ function generateMaze(sizeX, sizeY) {
       maze[y][x] = 0; // Phá tường
     }
   }
-
   return maze;
 }
 

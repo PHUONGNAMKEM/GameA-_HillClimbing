@@ -19,8 +19,8 @@ h1 {
 
 #game-container {
     display: grid;
-    grid-template-columns: repeat(50, 60px);
-    grid-template-rows: repeat(30, 60px);
+    grid-template-columns: repeat(60, 60px);
+    grid-template-rows: repeat(28, 60px);
     gap: 2px;
   }
   
@@ -129,8 +129,8 @@ h1 {
     animation: scaleUpDown 1.5s ease-in-out infinite;
   }
   .btn-start2 {
-    width: 300px;
-    height: 200px;
+    width: 400px;
+    height: 300px;
     background-image: url('Mulai_Tombol_Permainan_Beralih_Efek_Stereo_Ikon__Permainan__Tombol__Saklar_PNG_Transparan_Clipart_dan_File_PSD_untuk_Unduh_Gratis-removebg-preview.png');
     background-repeat: no-repeat;
     background-size: 300px;
