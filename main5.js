@@ -9,10 +9,10 @@ const maze = Array.from({ length: sizeY }, () => Array(sizeX).fill(''));
 // Đặt vị trí ban đầu cho player và các thực thể khác
 const player = { x: 0, y: 0 };
 const enemies = [
-  { x: 2, y: 2, direction: 'right' },
+  { x: 17, y: 2, direction: 'right' },
   { x: 5, y: 5, direction: 'down' },
-  { x: 7, y: 3, direction: 'left' },
-  { x: 1, y: 8, direction: 'up' },
+  { x: 15, y: 7, direction: 'left' },
+  { x: 17, y: 4, direction: 'up' },
   { x: 2, y: 9, direction: 'right' },
   { x: 4, y: 8, direction: 'down' },
   // { x: 3, y: 19, direction: 'left' },
@@ -163,6 +163,8 @@ function moveEnemies() {
 
   renderMaze(); // Cập nhật giao diện
 }
+
+let gameStarted = false;
 // function moveEnemies() {
 //     // Nếu game over, không thực hiện di chuyển
 //     let gameOver = false;
@@ -195,6 +197,7 @@ function moveEnemies() {
 // Di chuyển enemies định kỳ
 const btnStart = document.getElementById('btn_start');
 document.addEventListener('click', () => {
+    gameStarted = true;
     setInterval(moveEnemies, 300);
 });
 
@@ -268,6 +271,7 @@ function renderPath(path) {
 
 // Cập nhật hàm di chuyển player để tránh ô chướng ngại vật
 document.addEventListener('keydown', (event) => {
+  if (!gameStarted) return; 
   const { key } = event;
   let newX = player.x;
   let newY = player.y;
